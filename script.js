@@ -96,4 +96,380 @@ function renderProducts(filterType) {
                 body.className = 'card-body';
                 body.innerHTML =
                     '<div class="card-brand">' + product.brand + '</div>' +
-                    '<div class="card-name">' + product.name
+                    '<div class="card-name">' + product.name + '</div>' +
+                    '<div class="card-type">' + product.skinType + '</div>' +
+                    '<div class="card-volume">' + product.volume + (product.art ? ' | Арт: ' + product.art : '') + '</div>' +
+                    '<div class="card-click-hint">Нажмите для подробностей →</div>';
+                card.appendChild(body);
+                card.onclick = function () { openModal(index); };
+                grid.appendChild(card);
+            })();
+        }
+        section.appendChild(grid);
+        container.appendChild(section);
+    }
+}
+
+function openModal(index) {
+    var allProducts = getAllProducts();
+    var p = allProducts[index];
+    if (!p) return;
+
+    var imgWrapper = document.getElementById('modal-img-wrapper');
+    renderImage(p, imgWrapper);
+
+    document.getElementById('modal-brand').textContent = p.brand;
+    document.getElementById('modal-name').textContent = p.name;
+    document.getElementById('modal-category').textContent = categoryNames[p.category] || p.category;
+    document.getElementById('modal-skinType').textContent = 'Для кожи: ' + p.skinType;
+    document.getElementById('modal-volume').textContent = p.volume + (p.art ? ' | Арт: ' + p.art : '');
+    document.getElementById('modal-description').textContent = p.description;
+    document.getElementById('modal-details').textContent = p.details || 'Информация уточняется';
+
+    document.getElementById('review-name').value = '';
+    document.getElementById('review-text').value = '';
+    document.getElementById('review-msg').innerHTML = '';
+    loadReviews(p.name);
+
+    document.getElementById('modal-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// Загрузка фото
+document.getElementById('file-upload-area').onclick = function () {
+    document.getElementById('user-image-file').click();
+};
+
+document.getElementById('user-image-file').onchange = function () {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        userImageData = e.target.result;
+        var preview = document.getElementById('user-image-preview');
+        preview.src = userImageData;
+        preview.style.display = 'block';
+        document.getElementById('file-upload-text').textContent = '✅ Фото выбрано: ' + file.name;
+    };
+    reader.readAsDataURL(file);
+};
+
+// Добавление продукта
+document.getElementById('open-add-form').onclick = function () {
+    editingIndex = -1;
+    document.getElementById('add-form-overlay').querySelector('h2').textContent = '➕ Добавить продукт';
+    document.getElementById('submit-product').textContent = 'Добавить';
+    clearAddForm();
+    document.getElementById('add-form-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+};
+
+function clearAddForm() {
+    document.getElementById('user-brand').value = '';
+    document.getElementById('user-name').value = '';
+    document.getElementById('user-category').value = 'sunscreen';
+    document.getElementById('user-skinType').value = '';
+    document.getElementById('user-description').value = '';
+    document.getElementById('user-details').value = '';
+    document.getElementById('user-volume').value = '';
+    document.getElementById('user-image-file').value = '';
+    document.getElementById('user-image-preview').style.display = 'none';
+    document.getElementById('file-upload-text').textContent = '📁 Нажмите, чтобы выбрать фото';
+    userImageData = '';
+    document.getElementById('add-msg').innerHTML = '';
+}
+
+document.getElementById('add-form-close').onclick = function () {
+    document.getElementById('add-form-overlay').classList.remove('show');
+    document.body.style.overflow = '';
+};
+
+document.getElementById('add-form-overlay').onclick = function (e) {
+    if (e.target === this) {
+        document.getElementById('add-form-overlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+};
+
+document.getElementById('submit-product').onclick = function () {
+    var brand = document.getElementById('user-brand').value.trim();
+    var name = document.getElementById('user-name').value.trim();
+
+    if (!brand || !name) {
+        document.getElementById('add-msg').innerHTML = '<span style="color: red;">Бренд и название обязательны!</span>';
+        return;
+    }
+
+    var productData = {
+        brand: brand,
+        name: name,
+        category: document.getElementById('user-category').value,
+        skinType: document.getElementById('user-skinType').value.trim() || 'все типы',
+        description: document.getElementById('user-description').value.trim(),
+        details: document.getElementById('user-details').value.trim(),
+        volume: document.getElementById('user-volume').value.trim(),
+        image: userImageData,
+        addedByUser: true
+    };
+
+    var userProducts = getUserProducts();
+
+    if (editingIndex >= 0) {
+        userProducts[editingIndex] = productData;
+        saveUserProducts(userProducts);
+        document.getElementById('add-msg').innerHTML = '<span style="color: green;">✅ Изменения сохранены!</span>';
+    } else {
+        userProducts.push(productData);
+        saveUserProducts(userProducts);
+        document.getElementById('add-msg').innerHTML = '<span style="color: green;">✅ Спасибо за помощь! Продукт добавлен!</span>';
+    }
+
+    renderProducts(document.querySelector('.skin-btn.active').getAttribute('data-filter'));
+
+    setTimeout(function () {
+        document.getElementById('add-form-overlay').classList.remove('show');
+        document.body.style.overflow = '';
+        document.getElementById('add-msg').innerHTML = '';
+    }, 2000);
+};
+
+// Админка
+document.getElementById('secret-login').onclick = function () {
+    document.getElementById('login-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('login-password').focus();
+};
+
+document.getElementById('login-cancel').onclick = function () {
+    document.getElementById('login-overlay').classList.remove('show');
+    document.body.style.overflow = '';
+};
+
+document.getElementById('login-overlay').onclick = function (e) {
+    if (e.target === this) {
+        document.getElementById('login-overlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+};
+
+document.getElementById('login-password').onkeypress = function (e) {
+    if (e.key === 'Enter') { document.getElementById('login-btn').click(); }
+};
+
+document.getElementById('login-btn').onclick = function () {
+    var pass = document.getElementById('login-password').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('login-overlay').classList.remove('show');
+        document.getElementById('login-password').value = '';
+        openAdminPanel();
+    } else {
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('login-password').value = '';
+    }
+};
+
+function openAdminPanel() {
+    var userProducts = getUserProducts();
+    var list = document.getElementById('admin-product-list');
+    list.innerHTML = '';
+
+    if (userProducts.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: #888;">Нет пользовательских продуктов</div>';
+    } else {
+        for (var i = 0; i < userProducts.length; i++) {
+            (function () {
+                var p = userProducts[i];
+                var index = i;
+                var item = document.createElement('div');
+                item.className = 'admin-product-item';
+                item.innerHTML = '<span><strong>' + p.brand + '</strong> — ' + p.name + ' <span class="user-badge">пользователь</span></span>' +
+                    '<span><button class="edit-btn">✏️</button> <button class="delete-btn">🗑️</button></span>';
+                
+                item.querySelector('.edit-btn').onclick = function (e) {
+                    e.stopPropagation();
+                    document.getElementById('admin-overlay').classList.remove('show');
+                    editUserProduct(index);
+                };
+                
+                item.querySelector('.delete-btn').onclick = function (e) {
+                    e.stopPropagation();
+                    if (confirm('Удалить «' + p.brand + ' — ' + p.name + '»?')) {
+                        var up = getUserProducts();
+                        up.splice(index, 1);
+                        saveUserProducts(up);
+                        renderProducts(document.querySelector('.skin-btn.active').getAttribute('data-filter'));
+                        openAdminPanel();
+                    }
+                };
+                list.appendChild(item);
+            })();
+        }
+    }
+
+    document.getElementById('admin-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function editUserProduct(index) {
+    var userProducts = getUserProducts();
+    var p = userProducts[index];
+    if (!p) return;
+
+    editingIndex = index;
+    document.getElementById('add-form-overlay').querySelector('h2').textContent = '✏️ Редактировать продукт';
+    document.getElementById('submit-product').textContent = 'Сохранить';
+
+    document.getElementById('user-brand').value = p.brand || '';
+    document.getElementById('user-name').value = p.name || '';
+    document.getElementById('user-category').value = p.category || 'sunscreen';
+    document.getElementById('user-skinType').value = p.skinType || '';
+    document.getElementById('user-description').value = p.description || '';
+    document.getElementById('user-details').value = p.details || '';
+    document.getElementById('user-volume').value = p.volume || '';
+    
+    if (p.image && p.image.trim()) {
+        userImageData = p.image;
+        var preview = document.getElementById('user-image-preview');
+        preview.src = p.image;
+        preview.style.display = 'block';
+        document.getElementById('file-upload-text').textContent = '📁 Нажмите, чтобы заменить фото';
+    } else {
+        userImageData = '';
+        document.getElementById('user-image-preview').style.display = 'none';
+        document.getElementById('file-upload-text').textContent = '📁 Нажмите, чтобы выбрать фото';
+    }
+
+    document.getElementById('add-msg').innerHTML = '';
+    document.getElementById('add-form-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('admin-close').onclick = function () {
+    document.getElementById('admin-overlay').classList.remove('show');
+    document.body.style.overflow = '';
+};
+
+document.getElementById('admin-overlay').onclick = function (e) {
+    if (e.target === this) {
+        document.getElementById('admin-overlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+};
+
+// Escape
+document.onkeydown = function (e) {
+    if (e.key === 'Escape') {
+        document.getElementById('modal-overlay').classList.remove('show');
+        document.getElementById('add-form-overlay').classList.remove('show');
+        document.getElementById('login-overlay').classList.remove('show');
+        document.getElementById('admin-overlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+};
+
+document.getElementById('modal-overlay').onclick = function (e) {
+    if (e.target === this) closeModal();
+};
+document.getElementById('modal-close').onclick = closeModal;
+
+// Фильтры
+var buttons = document.querySelectorAll('.skin-btn');
+for (var i = 0; i < buttons.length; i++) {
+    buttons[i].onclick = function () {
+        for (var j = 0; j < buttons.length; j++) { buttons[j].classList.remove('active'); }
+        this.classList.add('active');
+        renderProducts(this.getAttribute('data-filter'));
+    };
+}
+
+// ========== ОТЗЫВЫ ==========
+var currentProductName = '';
+var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx138wYwom53Ra9kWvjJNPA0RinRNxzArFMVoBnNsIwQ4igGwLlY0aH3W7YDkYzsIzc0Q/exec';
+var REVIEWS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWIvuSyv8nVK1RI9XZ-j-CgWou-y5ilZRpr2o3ZiQqumr4H9Mn4tWu6rIxXLyoQD5DG8ElipgFa42D/pub?output=csv';
+
+function loadReviews(productName) {
+    currentProductName = productName;
+    var list = document.getElementById('reviews-list');
+    list.innerHTML = '<p style="color: #888; font-size: 0.85rem;">Загрузка отзывов...</p>';
+
+    fetch(REVIEWS_CSV_URL)
+        .then(function(response) { return response.text(); })
+        .then(function(csv) {
+            var lines = csv.split('\n');
+            var reviews = [];
+            for (var i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                var cols = lines[i].split(',');
+                if (cols.length >= 4 && cols[0].trim() === productName) {
+                    reviews.push({
+                        name: cols[1].trim(),
+                        text: cols[2].trim(),
+                        date: cols[3].trim()
+                    });
+                }
+            }
+            renderReviews(reviews);
+        })
+        .catch(function() {
+            list.innerHTML = '<p style="color: #888; font-size: 0.85rem;">Отзывов пока нет. Будьте первым!</p>';
+        });
+}
+
+function renderReviews(reviews) {
+    var list = document.getElementById('reviews-list');
+    if (reviews.length === 0) {
+        list.innerHTML = '<p style="color: #888; font-size: 0.85rem;">Отзывов пока нет. Будьте первым!</p>';
+        return;
+    }
+    list.innerHTML = '';
+    for (var i = 0; i < reviews.length; i++) {
+        var div = document.createElement('div');
+        div.className = 'review-item';
+        div.innerHTML = '<div class="review-name">' + reviews[i].name + '</div>' +
+            '<div class="review-text">' + reviews[i].text + '</div>' +
+            '<div class="review-date">' + reviews[i].date + '</div>';
+        list.appendChild(div);
+    }
+}
+
+document.getElementById('submit-review').onclick = function() {
+    var name = document.getElementById('review-name').value.trim();
+    var text = document.getElementById('review-text').value.trim();
+    var msg = document.getElementById('review-msg');
+
+    if (!name || !text) {
+        msg.innerHTML = '<span style="color: red;">Заполните имя и отзыв!</span>';
+        return;
+    }
+
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('ru-RU');
+
+    msg.innerHTML = '<span style="color: #888;">Отправка...</span>';
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+            product: currentProductName,
+            name: name,
+            text: text,
+            date: dateStr
+        })
+    })
+    .then(function() {
+        msg.innerHTML = '<span style="color: green;">✅ Отзыв отправлен! Обновите страницу, чтобы увидеть его.</span>';
+        document.getElementById('review-name').value = '';
+        document.getElementById('review-text').value = '';
+    })
+    .catch(function() {
+        msg.innerHTML = '<span style="color: red;">Ошибка отправки. Попробуйте позже.</span>';
+    });
+};
+
+// Старт
+renderProducts('all');
