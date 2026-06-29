@@ -2,18 +2,22 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-   <link rel="icon" type="image/png" href="лого-edited-free (carve_photos)-edited-free (carve.photos).png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Уходовая косметика | Справочник</title>
+    <meta name="description" content="Справочник уходовой косметики. Подробные обзоры кремов, SPF, сывороток, пенок для умывания, мицеллярной воды. Рекомендации по типу кожи.">
+    <meta name="keywords" content="уходовая косметика, справочник косметики, SPF, кремы, умывание, уход за кожей, корейская косметика">
+    <title>Уходовая косметика | Справочник продуктов для ухода за кожей</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header class="site-header">
             <div>
-               <h1 class="site-title">Уходовая косметика
-    <span class="site-subtitle">подробный справочник продуктов</span>
-</h1>
+                <h1 class="site-title">Уходовая косметика
+                    <span class="site-subtitle">подробный справочник продуктов</span>
+                </h1>
             </div>
             <button class="add-product-btn" id="open-add-form">➕ Добавить свой продукт</button>
         </header>
@@ -29,7 +33,7 @@
         <div id="products-container"></div>
 
         <div class="note">
-            💡 <strong>Нажмите на карточку продукта</strong>, чтобы увидеть подробную информацию.
+            💡 <strong>Нажмите на карточку продукта</strong>, чтобы увидеть подробную информацию и отзывы.
         </div>
 
         <footer>
@@ -55,6 +59,18 @@
                     <h4>Состав и детали</h4>
                     <p id="modal-details"></p>
                 </div>
+                
+                <!-- Отзывы -->
+                <div class="reviews-section">
+                    <h4>💬 Отзывы</h4>
+                    <div id="reviews-list"></div>
+                    <div class="review-form">
+                        <input type="text" id="review-name" placeholder="Ваше имя">
+                        <textarea id="review-text" rows="3" placeholder="Напишите ваш отзыв о продукте..."></textarea>
+                        <button class="submit-btn" id="submit-review">Отправить отзыв</button>
+                        <p id="review-msg" style="margin-top: 8px; font-size: 0.85rem;"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -70,6 +86,8 @@
                 <div class="form-group"><label>Категория</label><select id="user-category">
                     <option value="sunscreen">☀️ SPF защита</option>
                     <option value="cream">🧴 Крем</option>
+                    <option value="foam">🫧 Пенка / гель для умывания</option>
+                    <option value="serum">💧 Сыворотка</option>
                     <option value="micellar">💦 Мицеллярная вода</option>
                     <option value="oilcleanser">🫒 Гидрофильное масло</option>
                 </select></div>
