@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уходовая косметика | Справочник</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <div>
+                <h1 class="site-title">Уходовая косметика
+                    <span class="site-subtitle">подробный справочник продуктов</span>
+                </h1>
+            </div>
+            <button class="add-product-btn" id="open-add-form">➕ Добавить свой продукт</button>
+        </header>
+
+        <div class="skin-nav">
+            <button class="skin-btn active" data-filter="all">Вся кожа</button>
+            <button class="skin-btn" data-filter="жирная">Жирная / Комби</button>
+            <button class="skin-btn" data-filter="сухая">Сухая</button>
+            <button class="skin-btn" data-filter="чувствительная">Чувствительная</button>
+            <button class="skin-btn" data-filter="нормальная">Нормальная</button>
+        </div>
+
+        <div id="products-container"></div>
+
+        <div class="note">
+            💡 <strong>Нажмите на карточку продукта</strong>, чтобы увидеть подробную информацию.
+        </div>
+
+        <footer>
+            <p>Справочник уходовой косметики<span class="secret-login" id="secret-login">.</span></p>
+        </footer>
+    </div>
+
+    <!-- Модальное окно продукта -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" id="modal-close">✕</button>
+            <div class="modal-img-wrapper" id="modal-img-wrapper"></div>
+            <div class="modal-body">
+                <div class="modal-brand" id="modal-brand"></div>
+                <div class="modal-name" id="modal-name"></div>
+                <div class="modal-info-row">
+                    <span id="modal-category"></span>
+                    <span id="modal-skinType"></span>
+                    <span id="modal-volume"></span>
+                </div>
+                <div class="modal-description" id="modal-description"></div>
+                <div class="modal-details-block">
+                    <h4>Состав и детали</h4>
+                    <p id="modal-details"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Форма добавления -->
+    <div class="modal-overlay" id="add-form-overlay">
+        <div class="modal">
+            <button class="modal-close" id="add-form-close">✕</button>
+            <div class="modal-body">
+                <h2 style="font-size: 1.5rem; margin-bottom: 20px;">➕ Добавить продукт</h2>
+                <div class="form-group"><label>Бренд *</label><input type="text" id="user-brand" placeholder="SKIN 1004"></div>
+                <div class="form-group"><label>Название *</label><input type="text" id="user-name" placeholder="Название"></div>
+                <div class="form-group"><label>Категория</label><select id="user-category">
+                    <option value="sunscreen">☀️ SPF защита</option>
+                    <option value="cream">🧴 Крем</option>
+                    <option value="micellar">💦 Мицеллярная вода</option>
+                    <option value="oilcleanser">🫒 Гидрофильное масло</option>
+                </select></div>
+                <div class="form-group"><label>Тип кожи</label><input type="text" id="user-skinType" placeholder="жирная, чувствительная"></div>
+                <div class="form-group"><label>Объём</label><input type="text" id="user-volume" placeholder="50 мл"></div>
+                <div class="form-group">
+                    <label>Фото</label>
+                    <div class="file-upload-area" id="file-upload-area">
+                        <span id="file-upload-text">📁 Нажмите, чтобы выбрать фото</span>
+                        <input type="file" id="user-image-file" accept="image/*" style="display: none;">
+                    </div>
+                    <img id="user-image-preview" class="preview-img" src="" alt="Превью" style="display: none;">
+                </div>
+                <div class="form-group"><label>Описание</label><textarea id="user-description" rows="3" placeholder="Опишите продукт..."></textarea></div>
+                <div class="form-group"><label>Детали (активы, состав)</label><input type="text" id="user-details" placeholder="SPF50+ | Центелла"></div>
+                <button class="submit-btn" id="submit-product">Добавить</button>
+                <p id="add-msg" style="margin-top: 10px; font-size: 0.85rem;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вход в админку -->
+    <div class="modal-overlay" id="login-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-body" style="text-align: center;">
+                <h3 style="font-family: Georgia, serif; font-size: 1.4rem; margin-bottom: 8px;">🔐 Вход для автора</h3>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 20px;">Введите пароль</p>
+                <input type="password" id="login-password" placeholder="••••••••" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; text-align: center; letter-spacing: 4px; margin-bottom: 16px;">
+                <button class="submit-btn" id="login-btn">Войти</button>
+                <button class="cancel-btn" id="login-cancel">Отмена</button>
+                <p id="login-error" style="color: #c0392b; font-size: 0.8rem; margin-top: 8px; display: none;">Неверный пароль</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Админ-панель -->
+    <div class="modal-overlay" id="admin-overlay">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-family: Georgia, serif; font-size: 1.5rem;">⚙️ Управление</h2>
+                    <button class="cancel-btn" id="admin-close">Закрыть</button>
+                </div>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 16px;">Пользовательские продукты:</p>
+                <div id="admin-product-list" style="max-height: 400px; overflow-y: auto; border: 1px solid #e0dbd2; border-radius: 8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

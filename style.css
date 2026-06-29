@@ -1,0 +1,496 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #fafaf8;
+    color: #1a1a1a;
+    line-height: 1.7;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Шапка */
+.site-header {
+    padding: 40px 0 30px;
+    border-bottom: 1px solid #e0dbd2;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.site-title {
+    font-size: 2rem;
+    letter-spacing: 3px;
+    font-weight: normal;
+}
+
+.site-subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #555;
+    letter-spacing: 2px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin-top: 4px;
+}
+
+/* Фильтры */
+.skin-nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.skin-btn {
+    border: 1px solid #e0dbd2;
+    background: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: Georgia, serif;
+    transition: 0.2s;
+    color: #555;
+}
+
+.skin-btn.active,
+.skin-btn:hover {
+    background: #1a1a1a;
+    color: white;
+    border-color: #1a1a1a;
+}
+
+/* Карточки */
+.section {
+    margin-bottom: 50px;
+}
+
+.section-heading {
+    font-size: 1.8rem;
+    font-weight: normal;
+    border-bottom: 1px solid #e0dbd2;
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e0dbd2;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.card-img-wrapper {
+    width: 100%;
+    height: 280px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+}
+
+.card-body {
+    padding: 18px 20px 22px;
+}
+
+.card-brand {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #9b7b6b;
+    margin-bottom: 4px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-weight: 600;
+}
+
+.card-name {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.card-type {
+    display: inline-block;
+    background: #f3ede7;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+}
+
+.card-volume {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.card-click-hint {
+    font-size: 0.7rem;
+    color: #bbb;
+    margin-top: 6px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.note {
+    background: #f3ede7;
+    padding: 18px 22px;
+    border-radius: 12px;
+    margin: 30px 0;
+    font-style: italic;
+}
+
+/* Кнопка добавить */
+.add-product-btn {
+    background: #9b7b6b;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.add-product-btn:hover {
+    background: #7d6255;
+}
+
+/* Секретный вход */
+.secret-login {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.secret-login:hover {
+    color: #9b7b6b;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #555;
+    font-size: 0.8rem;
+    border-top: 1px solid #e0dbd2;
+    margin-top: 40px;
+}
+
+/* Модальное окно */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-family: Georgia, serif;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #333;
+}
+
+.modal-close:hover {
+    background: #eee;
+}
+
+.modal-img-wrapper {
+    width: 100%;
+    height: 400px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+}
+
+.modal-body {
+    padding: 28px 30px 30px;
+}
+
+.modal-brand {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #9b7b6b;
+    margin-bottom: 6px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-weight: 600;
+}
+
+.modal-name {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.modal-info-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.modal-info-row span {
+    background: #f3ede7;
+    padding: 5px 14px;
+    border-radius: 20px;
+}
+
+.modal-description {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.modal-details-block {
+    background: #fafaf8;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid #e0dbd2;
+}
+
+.modal-details-block h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: #9b7b6b;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.modal-details-block p {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Загрузка фото */
+.file-upload-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.9rem;
+    color: #888;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.file-upload-area:hover {
+    border-color: #9b7b6b;
+    color: #9b7b6b;
+}
+
+.preview-img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 8px;
+    margin-top: 10px;
+    object-fit: contain;
+}
+
+.submit-btn {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background: #1a252f;
+}
+
+.cancel-btn {
+    background: #eee;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Админ-список */
+.admin-product-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-product-item:hover {
+    background: #fdf2f2;
+}
+
+.admin-product-item .delete-btn {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.admin-product-item .user-badge {
+    background: #f3ede7;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    margin-left: 8px;
+}
+
+@media (max-width: 600px) {
+    .card-img-wrapper {
+        height: 220px;
+    }
+
+    .modal-img-wrapper {
+        height: 280px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+}
+
+.admin-product-item .edit-btn {
+    background: #9b7b6b;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 6px;
+}
+
+.admin-product-item .edit-btn:hover {
+    background: #7d6255;
+}
