@@ -75,15 +75,117 @@ footer { text-align: center; padding: 40px 0; color: #555; font-size: 0.8rem; bo
 .admin-product-item .user-badge { background: #f3ede7; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 8px; }
 
 /* Отзывы */
-.reviews-section { margin-top: 24px; padding-top: 24px; border-top: 1px solid #e0dbd2; }
-.reviews-section h4 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; color: #9b7b6b; font-family: 'Segoe UI', Arial, sans-serif; }
-.review-item { background: #fafaf8; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; }
-.review-item .review-name { font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; }
-.review-item .review-text { font-size: 0.9rem; color: #444; line-height: 1.5; }
-.review-item .review-date { font-size: 0.7rem; color: #999; margin-top: 4px; }
-.review-form { margin-top: 16px; }
-.review-form input, .review-form textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; margin-bottom: 8px; }
-.review-form textarea { resize: vertical; }
+.reviews-section {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 2px solid #f3ede7;
+}
+
+.reviews-section h4 {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+    color: #9b7b6b;
+    font-family: Georgia, serif;
+    font-weight: normal;
+}
+
+.review-item {
+    background: #fdfcf9;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #f0ebe3;
+    transition: 0.2s;
+}
+
+.review-item:hover {
+    border-color: #e0dbd2;
+    background: #faf8f4;
+}
+
+.review-item .review-name {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #5a4a3e;
+    margin-bottom: 6px;
+    font-family: Georgia, serif;
+}
+
+.review-item .review-text {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.review-item .review-date {
+    font-size: 0.75rem;
+    color: #bbb;
+    margin-top: 8px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.review-form {
+    margin-top: 20px;
+    background: #fdfcf9;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #f0ebe3;
+}
+
+.review-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0dbd2;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    margin-bottom: 10px;
+    background: white;
+    transition: 0.2s;
+}
+
+.review-form input:focus {
+    outline: none;
+    border-color: #9b7b6b;
+    box-shadow: 0 0 0 3px rgba(155, 123, 107, 0.1);
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0dbd2;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    resize: vertical;
+    background: white;
+    transition: 0.2s;
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: #9b7b6b;
+    box-shadow: 0 0 0 3px rgba(155, 123, 107, 0.1);
+}
+
+.review-form .submit-btn {
+    background: #9b7b6b;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    transition: 0.2s;
+    margin-top: 4px;
+}
+
+.review-form .submit-btn:hover {
+    background: #7d6255;
+}
 
 @media (max-width: 600px) {
     .card-img-wrapper { height: 220px; }
